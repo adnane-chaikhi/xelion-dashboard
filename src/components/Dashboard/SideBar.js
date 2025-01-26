@@ -1,3 +1,6 @@
+import { Link } from 'react-router-dom';
+import logo from '../../assets/img/logo.png';
+
 const Sidebar = () => {
     return (
         <aside className="w-64 bg-[#272e48] text-white flex flex-col justify-between min-h-screen">
@@ -5,32 +8,32 @@ const Sidebar = () => {
             <div>
                 <div className="p-4 flex items-center justify-center border-b border-blue-700">
                     <img
-                        src="https://via.placeholder.com/50"
+                        src={logo}
                         alt="Logo"
                         className="w-12 h-12 rounded-full"
                     />
-                    <span className="ml-3 text-2xl font-bold">CleaningCo Admin</span>
                 </div>
+                
                 {/* Navigation Menu */}
                 <nav className="mt-4">
                     <ul>
-                        <li className="p-4 hover:bg-blue-700">
-                            <a href="#">Dashboard</a>
+                        <li className="p-4 hover:bg-[#00C1D4]">
+                            <Link to="/dashboard/analytics">Analytics</Link>
                         </li>
-                        <li className="p-4 hover:bg-blue-700">
-                            <a href="#">Bookings</a>
+                        <li className="p-4 hover:bg-[#00C1D4]">
+                            <Link to="/dashboard/bookings">Bookings</Link>
                         </li>
-                        <li className="p-4 hover:bg-blue-700">
-                            <a href="#">Services</a>
+                        <li className="p-4 hover:bg-[#00C1D4]">
+                            <Link to="/services">Services</Link>
                         </li>
-                        <li className="p-4 hover:bg-blue-700">
-                            <a href="#">Clients</a>
+                        <li className="p-4 hover:bg-[#00C1D4]">
+                            <Link to="/clients">Clients</Link>
                         </li>
-                        <li className="p-4 hover:bg-blue-700">
-                            <a href="#">Reports</a>
+                        <li className="p-4 hover:bg-[#00C1D4]">
+                            <Link to="/reports">Reports</Link>
                         </li>
-                        <li className="p-4 hover:bg-blue-700">
-                            <a href="#">Settings</a>
+                        <li className="p-4 hover:bg-[#00C1D4]">
+                            <Link to="/settings">Settings</Link>
                         </li>
                     </ul>
                 </nav>
