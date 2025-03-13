@@ -1,43 +1,40 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
+import useApi from "../useApi";
+
+const API_BOOKINGS = 'http://localhost/cleanease/backend/controllers/bookings.php';
 
 const Bookings = () => {
-  const [bookings, setBookings] = useState([
-    {
-      id: 1,
-      clientName: "John Doe",
-      serviceType: "Carpet Cleaning",
-      date: "2025-01-26",
-      status: "Completed",
-    },
-    {
-      id: 2,
-      clientName: "Jane Smith",
-      serviceType: "Window Cleaning",
-      date: "2025-01-25",
-      status: "Pending",
-    },
-    {
-      id: 3,
-      clientName: "Michael Brown",
-      serviceType: "Glass Cleaning",
-      date: "2025-01-24",
-      status: "In Progress",
-    },
-  ]);
-
+  const [bookings, setBookings] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [newBooking, setNewBooking] = useState({
     clientName: "",
     serviceType: "Carpet Cleaning",  // Default service type
+    serviceAddress : "",
     date: "",
     status: "Pending",
   });
-
+  const { sendRequest } = useApi();
   const [showModal, setShowModal] = useState(false);
   const [showAddBooking, setShowAddBooking] = useState(false);
+/********************************* fetch all bookings  *******************************************/
+const fetchBookings = async () => {
+  try {
+    const data = await sendRequest(API_BOOKINGS, 'GET');
+    console.log(data);
+    
+    setBookings(data);
+  } catch (error) {
+    console.error('Failed to fetch bookings');
+  }
+};
 
+useEffect(() => {
+  fetchBookings();
+}, []);
+
+/***************************************************** */
   // Service types for select dropdown
   const serviceTypes = [
     "Carpet Cleaning",
@@ -136,6 +133,17 @@ const Bookings = () => {
               </select>
             </div>
             <div className="mb-4">
+              <label className="block text-sm font-medium mb-2">Service Type</label>
+              <input type="text"
+                value={newBooking.serviceAddress}
+                onChange={(e) =>
+                  setNewBooking({ ...newBooking, serviceAddress: e.target.value })
+                }
+                className="border px-4 py-2 rounded w-full"
+              />
+                
+            </div>
+            <div className="mb-4">
               <input
                 type="date"
                 className="border px-4 py-2 rounded w-full"
@@ -170,6 +178,7 @@ const Bookings = () => {
             <th className="py-3 px-4 text-left">ID</th>
             <th className="py-3 px-4 text-left">Client Name</th>
             <th className="py-3 px-4 text-left">Service Type</th>
+            <th className="py-3 px-4 text-left">service address</th>
             <th className="py-3 px-4 text-left">Date</th>
             <th className="py-3 px-4 text-left">Status</th>
             <th className="py-3 px-4 text-left">Actions</th>
@@ -182,9 +191,10 @@ const Bookings = () => {
               className="border-b hover:bg-gray-50 transition-colors"
             >
               <td className="py-3 px-4">{booking.id}</td>
-              <td className="py-3 px-4">{booking.clientName}</td>
-              <td className="py-3 px-4">{booking.serviceType}</td>
-              <td className="py-3 px-4">{booking.date}</td>
+              <td className="py-3 px-4">{booking.client_name}</td>
+              <td className="py-3 px-4">{booking.service_type}</td>
+              <td className="py-3 px-4">{booking.client_address}</td>
+              <td className="py-3 px-4">{booking.booking_date}</td>
               <td
                 className={`py-3 px-4 font-semibold ${
                   booking.status === "Completed"
