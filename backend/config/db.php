@@ -1,9 +1,9 @@
 <?php
 // Database connection details
-$host = "localhost"; // Hostname (use the IP or domain of your server)
-$username = "root";  // Database username
-$password = "";      // Database password
-$dbname = "cleanease"; // Replace with your database name
+$host = "srv1318.hstgr.io"; // Hostname (use the IP or domain of your server)
+$username = "u702864613_uoXpD";  // Database username
+$password = "e1O>u^8#Dh";      // Database password
+$dbname = "u702864613_JIjbs"; // Replace with your database name
 
 // Create a new MySQLi connection
 $conn = new mysqli($host, $username, $password, $dbname);

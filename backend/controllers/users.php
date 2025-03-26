@@ -16,11 +16,12 @@ if ($conn->connect_error) {
 
 // // Handling GET requests with INNER JOIN to get client name
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    $sql = "SELECT bookings.id, bookings.client_id, bookings.booking_date, bookings.status,bookings.service_type, 
-            clients.name AS client_name, 
-            clients.address  AS client_address
-            FROM bookings 
-            INNER JOIN clients ON bookings.client_id = clients.id";
+    $sql = "SELECT users.id, users.name, users.email, users.password, users.role_id, 
+                    roles.role_name, 
+                    users.created_at 
+                FROM users 
+                INNER JOIN roles ON users.role_id = roles.id;
+                ";
     
     $result = $conn->query($sql);
 
