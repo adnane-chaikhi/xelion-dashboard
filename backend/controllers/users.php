@@ -3,7 +3,7 @@
 header("Access-Control-Allow-Origin: *"); // Allow any origin to access
 header("Access-Control-Allow-Methods: GET, POST, DELETE, PUT, OPTIONS"); // Allowed HTTP methods
 header("Access-Control-Allow-Headers: Content-Type, Authorization"); // Allowed headers
-require '../config/db.php';
+require_once '../config/db.php';
 
 // Handle preflight requests (OPTIONS method)
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -26,13 +26,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
-        $bookings = [];
+        $users = [];
         while ($row = $result->fetch_assoc()) {
-            $bookings[] = $row;
+            $users[] = $row;
         }
-        echo json_encode($bookings); // Send back the bookings data in JSON format
+        echo json_encode($users); // Send back the bookings data in JSON format
     } else {
-        echo json_encode(["message" => "No bookings found."]);
+        echo json_encode(["message" => "No users found."]);
     }
 }
 

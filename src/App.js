@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Users from './components/Users';
 // import Home from './components/Home';   // Home component (or any other components you want)
 import Sidebar from './components/SideBar';
+import Installations from './pages/Installations';
 const App = () => {
   return (
     <Router>
@@ -15,6 +16,7 @@ const App = () => {
           <div className="flex-grow">
             <Routes>
               <Route path="/users" element={<Users />} />
+              <Route path="/installations" element={<Installations />} />
             </Routes>
           </div>
         </div>

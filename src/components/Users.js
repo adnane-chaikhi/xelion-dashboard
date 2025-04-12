@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Pencil , Trash } from 'lucide-react';
 import  useApi  from './useApi'; // Assuming useApi is a custom hook for fetching data
 import Modal from './Modal'; // Modal component
 import UserForm from './UserForm'; // Form for creating/editing users
@@ -6,6 +7,7 @@ const apiUrl =  'http://localhost/solar%20energy/backend/controllers/users.php';
 
 const Users = () => {
   const [users,setUsers] = useState([]); // Fetch users data from API
+  const [isEditing , setIsediting] =  useState(false);
   const { sendRequest } = useApi(); // Destructure the sendRequest method from your hook
   const [showModal, setShowModal] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
@@ -18,7 +20,7 @@ const Users = () => {
       try {
         const data = await sendRequest(apiUrl, 'GET');
         setUsers(data); // Set the response data to state
-        console.log(users);
+
         
       } catch (error) {
         console.error('Error fetching users:', error);
@@ -29,13 +31,19 @@ const Users = () => {
   }, [sendRequest]);
   /***************************************************** */
   const handleOpenModal = (user = null) => {
-    setEditingUser(user);
-    setShowModal(true);
+    
+        if(user) {
+          setEditingUser(user);
+          setIsediting(true);
+          console.log(editingUser);
+        }
+        setShowModal(true);
   };
 
   const handleCloseModal = () => {
     setShowModal(false);
     setEditingUser(null);
+    setIsediting(false);
   };
 
   // Search handler
@@ -49,6 +57,7 @@ const Users = () => {
   };
 
   // Filter users based on search query and role
+
   const filteredUsers = users?.filter((user) => {
     const matchesSearch = user.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesRole = filterRole === 'All' || user.role === filterRole;
@@ -60,8 +69,8 @@ const Users = () => {
     <div>
    
       {/* Main Content Area */}
-      <div className="flex-1 p-6 bg-gray-100">
-        <div className="max-w-screen-lg mx-auto">
+      <div className="flex-1 py-6 bg-gray-100">
+        <div className="max-w-[90%] mx-auto">
           <div className="flex items-center justify-between mb-6">
             {/* Search & Filter Section */}
             <div className="flex space-x-6 items-center">
@@ -111,15 +120,16 @@ const Users = () => {
                     <td className="py-3 px-4 text-sm border-b border-gray-300">
                       <button
                         onClick={() => handleOpenModal(user)}
-                        className="text-blue-500 hover:text-blue-700 focus:outline-none mr-2 py-2 px-4 border border-blue-500 rounded-md"
+                        className="px-2 items-center gap-2 text-sm text-blue-600 hover:text-blue-800"
                       >
-                        Edit
+                        <Pencil className="w-5 h-5 text-blue-500" />
+
                       </button>
                       <button
                         // onClick={() => handleDeleteUser(user.id)} // Implement delete function
-                        className="text-red-500 hover:text-red-700 focus:outline-none py-2 px-4 border border-red-500 rounded-md"
+                        className=" items-center gap-2 text-sm text-red-600 hover:text-red-800"
                       >
-                        Delete
+                       <Trash/>
                       </button>
                     </td>
                   </tr>
@@ -130,8 +140,8 @@ const Users = () => {
 
           {/* Modal for Add/Edit User */}
           {showModal && (
-            <Modal onClose={handleCloseModal} title={editingUser ? 'Edit User' : 'Add User'}>
-              <UserForm/>
+            <Modal onClose={handleCloseModal} title={isEditing ? 'Edit User' : 'Add User'}>
+              <UserForm  isEditing={isEditing} user={editingUser} />
             </Modal>
           )}
         </div>

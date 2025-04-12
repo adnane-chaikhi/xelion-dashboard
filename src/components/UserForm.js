@@ -1,20 +1,25 @@
 import React, { useState, useEffect } from 'react';
 
-const UserForm = ({ user, onSave }) => {
+const UserForm = ({ user, onSave , isEditing  }) => {
+
   // State for the form fields
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     role: 'User',
-  });
+    phone_number : '' , 
+    address : ''
+   });
 
   // If a user is passed (for editing), populate the form fields
   useEffect(() => {
     if (user) {
       setFormData({
-        name: user.name,
-        email: user.email,
-        role: user.role,
+        name: user.name || '',
+        email: user.email || '',
+        role: user.role || 'User',
+        phone_number: user.phone_number || '',
+        address: user.address || ''
       });
     }
   }, [user]);
@@ -37,7 +42,7 @@ const UserForm = ({ user, onSave }) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label htmlFor="name" className="block text-sm font-semibold">Name</label>
+        <label htmlFor="name" className="block text-sm font-semibold">Full Name</label>
         <input
           type="text"
           id="name"
@@ -51,7 +56,7 @@ const UserForm = ({ user, onSave }) => {
 
       <div>
         <label htmlFor="email" className="block text-sm font-semibold">Email</label>
-        <input
+        <input disabled={isEditing}
           type="email"
           id="email"
           name="email"
@@ -61,10 +66,33 @@ const UserForm = ({ user, onSave }) => {
           className="w-full px-4 py-2 border border-blue-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
-
+      <div>
+        <label htmlFor="phone" className="block text-sm font-semibold">phone number</label>
+        <input 
+          type="text"
+          id="phone"
+          name="phone_number"
+          value={formData.phone_number}
+          onChange={handleChange}
+          required
+          className="w-full px-4 py-2 border border-blue-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+      <div>
+        <label htmlFor="address" className="block text-sm font-semibold">address / region</label>
+        <input
+          type="address"
+          id="address"
+          name="address"
+          value={formData.address}
+          onChange={handleChange}
+          required
+          className="w-full px-4 py-2 border border-blue-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
       <div>
         <label htmlFor="role" className="block text-sm font-semibold">Role</label>
-        <select
+        <select  disabled={isEditing}
           id="role"
           name="role"
           value={formData.role}
@@ -74,6 +102,8 @@ const UserForm = ({ user, onSave }) => {
         >
           <option value="User">User</option>
           <option value="Admin">Admin</option>
+          <option value="Installer">Installer</option>
+          <option value="Customer">Customer</option>
         </select>
       </div>
 

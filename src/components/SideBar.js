@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Home, Users, BarChart, CreditCard, Wrench, Bell, Settings, LogOut } from "lucide-react";
+import { Home, Users, BarChart, CreditCard, Wrench, Bell, Settings, LogOut , PanelTop  , Sun} from "lucide-react";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -23,6 +23,7 @@ const Sidebar = () => {
           <SidebarItem icon={<Users />} text="Users" to="/users" isOpen={isOpen} />
           <SidebarItem icon={<BarChart />} text="Energy Production" to="/energy" isOpen={isOpen} />
           <SidebarItem icon={<CreditCard />} text="Billing" to="/billing" isOpen={isOpen} />
+          <SidebarItem icon={<PanelTop/>} text="Installations" to="/installations" isOpen={isOpen} />
           <SidebarItem icon={<Wrench />} text="Maintenance" to="/maintenance" isOpen={isOpen} />
           <SidebarItem icon={<Bell />} text="Alerts" to="/alerts" isOpen={isOpen} />
           <SidebarItem icon={<Settings />} text="Settings" to="/settings" isOpen={isOpen} />
