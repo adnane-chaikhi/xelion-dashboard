@@ -5,6 +5,7 @@ import Users from './components/Users';
 import Sidebar from './components/SideBar';
 import Dashboard from './pages/Dashboard.js';
 import Login from './pages/Login.js'
+import Register from './pages/Register.js';
 const App = () => {
   return (
     <Router>
@@ -16,6 +17,7 @@ const App = () => {
             <Routes>
               <Route path="/*" element={<Dashboard/>} />
               <Route path="/login" element={<Login/>} />
+              <Route path="/Register" element={<Register/>} />
             </Routes>
           </div>
         </div>

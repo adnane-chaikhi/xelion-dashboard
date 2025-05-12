@@ -4,8 +4,18 @@ import Users from '../components/Users';
 // import Home from './components/Home';   // Home component (or any other components you want)
 import Sidebar from '../components/SideBar';
 import Installations from './Installations';
+import Settings from './Settings';
 import Billing  from './Billing';
 const Dashboard = () => {
+  const currentUser = { role: 'Admin' }; // Or 'Admin', 'Support', etc.
+
+  const allowedRoutes = {
+    Admin: ['users', 'installations', 'billing', 'settings'],
+    Technician: ['installations'],
+    Support: ['settings'],
+  };
+  const canAccess = (route) => allowedRoutes[currentUser.role]?.includes(route);
+
   return (
     
       <div className="App">
@@ -18,7 +28,9 @@ const Dashboard = () => {
             <Routes>
               <Route path="/users" element={<Users />} />
               <Route path="/installations" element={<Installations />} />
-              <Route path="/billing" element={<Billing/>} />
+              {canAccess('billing') && <Route path="/billing" element={<Billing />} />}
+
+              <Route path="/settings" element={<Settings/>} />
             </Routes>
           </div>
         </div>

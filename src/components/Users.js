@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Pencil, Trash } from 'lucide-react';
 import useApi from './useApi';
-import Modal from './Modal';
-import UserForm from './UserForm';
 
 const apiUrl = 'http://localhost/solar%20energy/backend/controllers/users.php';
 
@@ -10,10 +8,11 @@ const Users = () => {
   const [users, setUsers] = useState([]);
   const [isEditing, setIsediting] = useState(false);
   const { sendRequest } = useApi();
-  const [showModal, setShowModal] = useState(false);
+  const [showForm, setShowForm] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterRole, setFilterRole] = useState('All');
+  const [formData, setFormData] = useState({ name: '', email: '', role_name: '', city: '', installation_type: '', status: '' , description : '' });
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -27,18 +26,24 @@ const Users = () => {
     fetchUsers();
   }, [sendRequest]);
 
-  const handleOpenModal = (user = null) => {
+  const handleOpenForm = (user = null) => {
     if (user) {
+      setFormData(user);
       setEditingUser(user);
       setIsediting(true);
+    } else {
+      setFormData({ name: '', email: '', role_name: '', city: '', installation_type: '', status: '' });
+      setEditingUser(null);
+      setIsediting(false);
     }
-    setShowModal(true);
+    setShowForm(true);
   };
 
-  const handleCloseModal = () => {
-    setShowModal(false);
+  const handleCloseForm = () => {
+    setShowForm(false);
     setEditingUser(null);
     setIsediting(false);
+    setFormData({ name: '', email: '', role_name: '', city: '', installation_type: '', status: '' });
   };
 
   const handleSearchChange = (event) => {
@@ -55,8 +60,15 @@ const Users = () => {
     return matchesSearch && matchesRole;
   });
 
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    console.log(isEditing ? 'Updating user' : 'Adding user', formData);
+    // Use sendRequest here to POST or PUT depending on isEditing
+    handleCloseForm();
+  };
+
   return (
-    <div className="flex-1 py-10 px-4 min-h-screen text-white">
+    <div className="flex-1 py-10 px-4 bg-[#172137] min-h-screen text-white">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div className="flex flex-col md:flex-row gap-4">
@@ -79,14 +91,113 @@ const Users = () => {
               <option value="Client">Client</option>
             </select>
           </div>
-
           <button
-            onClick={() => handleOpenModal()}
+            onClick={() => handleOpenForm()}
             className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2 rounded-md shadow-lg"
           >
             + Add User
           </button>
         </div>
+
+        {showForm && (
+  <div className="bg-[#1f2937] text-white shadow-md rounded-lg p-6 mb-8">
+    <h2 className="text-xl font-bold mb-4">{isEditing ? 'Edit User' : 'Add New User'}</h2>
+    <form onSubmit={handleFormSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      
+      {/* Full Name */}
+      <div>
+        <label className="block text-sm font-medium mb-1">Full Name</label>
+        <input
+          type="text"
+          value={formData.name}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          className="w-full px-3 py-2 rounded bg-[#172137] text-white border border-gray-700 focus:outline-none"
+          required
+        />
+      </div>
+
+      {/* Email */}
+      <div>
+        <label className="block text-sm font-medium mb-1">Email</label>
+        <input
+          type="email"
+          value={formData.email}
+          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          className="w-full px-3 py-2 rounded bg-[#172137] text-white border border-gray-700 focus:outline-none"
+          required
+        />
+      </div>
+
+      {/* Role */}
+      <div>
+        <label className="block text-sm font-medium mb-1">Role</label>
+        <select
+          value={formData.role}
+          onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+          className="w-full px-3 py-2 rounded bg-[#172137] text-white border border-gray-700"
+        >
+          <option value="User">User</option>
+          <option value="Admin">Admin</option>
+          <option value="Technician">Technician</option>
+          <option value="Support">Support</option>
+        </select>
+      </div>
+
+      {/* Installation Type */}
+      <div>
+        <label className="block text-sm font-medium mb-1">Installation Type</label>
+        <select
+          value={formData.installationType}
+          onChange={(e) => setFormData({ ...formData, installationType: e.target.value })}
+          className="w-full px-3 py-2 rounded bg-[#172137] text-white border border-gray-700"
+        >
+          <option value="">Select type</option>
+          <option value="Residential">Residential</option>
+          <option value="Commercial">Commercial</option>
+          <option value="Industrial">Industrial</option>
+        </select>
+      </div>
+
+      {/* Status */}
+      <div>
+        <label className="block text-sm font-medium mb-1">Status</label>
+        <select
+          value={formData.status}
+          onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+          className="w-full px-3 py-2 rounded bg-[#172137] text-white border border-gray-700"
+        >
+          <option value="Active">Active</option>
+          <option value="Inactive">Inactive</option>
+          <option value="Suspended">Suspended</option>
+        </select>
+      </div>
+
+      {/* Notes */}
+      <div className="md:col-span-2">
+        <label className="block text-sm font-medium mb-1">Notes / Description</label>
+        <textarea
+          rows="4"
+          value={formData.description}
+          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+          className="w-full px-3 py-2 rounded bg-[#172137] text-white border border-gray-700"
+          placeholder="Write any internal notes about the user..."
+        />
+      </div>
+
+      {/* Submit */}
+      <div className="md:col-span-2 text-right mt-4">
+        <button
+          type="submit"
+          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded transition"
+        >
+          {isEditing ? 'Update User' : 'Create User'}
+        </button>
+      </div>
+    </form>
+  </div>
+)}
+
+
 
         <div className="overflow-x-auto bg-[#1f2937] rounded-xl shadow-lg">
           <table className="min-w-full text-sm text-left">
@@ -98,7 +209,6 @@ const Users = () => {
                 <th className="px-6 py-4">Role</th>
                 <th className="px-6 py-4">Location</th>
                 <th className="px-6 py-4">Type</th>
-                <th className="px-6 py-4">Last Login</th>
                 <th className="px-6 py-4">Status</th>
                 <th className="px-6 py-4 text-right">Actions</th>
               </tr>
@@ -109,35 +219,20 @@ const Users = () => {
                   <td className="px-6 py-4 text-gray-200">{user.id}</td>
                   <td className="px-6 py-4 font-medium text-white">{user.name}</td>
                   <td className="px-6 py-4 text-gray-300">{user.email}</td>
-                  <td className="px-6 py-4">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      user.role_name === 'Admin'
-                        ? 'bg-blue-500/20 text-blue-300'
-                        : user.role_name === 'Technician'
-                        ? 'bg-yellow-500/20 text-yellow-300'
-                        : user.role_name === 'Support'
-                        ? 'bg-purple-500/20 text-purple-300'
-                        : 'bg-green-500/20 text-green-300'
-                    }`}>
-                      {user.role_name}
-                    </span>
-                  </td>
+                  <td className="px-6 py-4 text-gray-300">{user.role_name}</td>
                   <td className="px-6 py-4 text-gray-300">{user.city}</td>
                   <td className="px-6 py-4 text-gray-300">{user.installation_type}</td>
-                  <td className="px-6 py-4 text-gray-400">{user.last_login}</td>
                   <td className="px-6 py-4">
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                       user.status === 'Active'
                         ? 'bg-green-400/20 text-green-300'
-                        : user.status === 'Suspended'
-                        ? 'bg-red-400/20 text-red-300'
-                        : 'bg-gray-400/20 text-gray-300'
+                        : 'bg-red-400/20 text-red-300'
                     }`}>
                       {user.status}
                     </span>
                   </td>
                   <td className="px-6 py-4 text-right space-x-2">
-                    <button onClick={() => handleOpenModal(user)} className="text-blue-400 hover:text-blue-200">
+                    <button onClick={() => handleOpenForm(user)} className="text-blue-400 hover:text-blue-200">
                       <Pencil className="w-4 h-4" />
                     </button>
                     <button className="text-red-400 hover:text-red-200">
@@ -149,12 +244,6 @@ const Users = () => {
             </tbody>
           </table>
         </div>
-
-        {showModal && (
-          <Modal onClose={handleCloseModal} title={isEditing ? 'Edit User' : 'Add User'}>
-            <UserForm isEditing={isEditing} user={editingUser} />
-          </Modal>
-        )}
       </div>
     </div>
   );
