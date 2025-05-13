@@ -1,92 +1,138 @@
 import React from 'react';
-import ApexCharts from 'react-apexcharts'; // Import ApexCharts component
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
 
-const Analytics = () => {
-  // Sample chart data
-  const chartData = {
-    series: [
-      {
-        name: 'Revenue',
-        data: [1200, 1500, 1800, 2200, 2500, 2700],
-      },
-      {
-        name: 'Jobs Completed',
-        data: [100, 120, 150, 180, 210, 240],
-      },
-    ],
-    options: {
-      chart: {
-        type: 'line',
-        height: 350,
-        zoom: {
-          enabled: true,
-        },
-      },
-      stroke: {
-        curve: 'smooth',
-      },
-      title: {
-        text: 'Company Performance',
-        align: 'center',
-        style: {
-          fontSize: '24px',
-          fontWeight: 'bold',
-          fontFamily: 'Arial, sans-serif',
-        },
-      },
-      xaxis: {
-        categories: ['January', 'February', 'March', 'April', 'May', 'June'],
-      },
-      colors: ['#00E396', '#FF5733'], // Custom chart colors
-      markers: {
-        size: 5,
-      },
-      tooltip: {
-        theme: 'dark',
-      },
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+const productionData = {
+  labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+  datasets: [
+    {
+      label: 'kWh Generated',
+      data: [220, 280, 300, 450, 420, 370, 500],
+      borderColor: 'rgba(234, 179, 8, 1)',
+      backgroundColor: 'rgba(234, 179, 8, 0.2)',
+      tension: 0.4,
+      fill: true,
     },
-  };
+  ],
+};
 
+const savingsData = {
+  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+  datasets: [
+    {
+      label: 'Savings ($)',
+      data: [120, 150, 170, 190, 210, 240],
+      borderColor: 'rgba(59, 130, 246, 1)',
+      backgroundColor: 'rgba(59, 130, 246, 0.2)',
+      tension: 0.4,
+      fill: true,
+    },
+  ],
+};
+
+const chartOptions = {
+  responsive: true,
+  plugins: {
+    legend: {
+      labels: { color: 'white' }
+    },
+    title: {
+      display: false,
+    },
+  },
+  scales: {
+    x: {
+      ticks: { color: 'white' },
+      grid: { color: '#374151' },
+    },
+    y: {
+      ticks: { color: 'white' },
+      grid: { color: '#374151' },
+    },
+  },
+};
+
+export default function DashboardAnalytics() {
   return (
-    <div className="p-8 space-y-8 bg-gray-100">
-      {/* Analytics Heading */}
-      <h2 className="text-3xl font-semibold text-gray-800 mb-6">Company Analytics</h2>
+    <div className="p-6 bg-[#1f2937] text-white min-h-screen">
+      <h1 className="text-2xl font-bold mb-6">📊 Xelion Dashboard</h1>
 
-      {/* Cards Section */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Card 1 - Total Revenue */}
-        <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center">
-          <h3 className="text-xl font-semibold text-gray-700">Total Revenue</h3>
-          <p className="text-2xl font-bold text-green-500 mt-2">$12,340</p>
-          <p className="text-sm text-gray-500 mt-1">+10% from last month</p>
+      {/* Overview Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <Card title="Total Energy Produced" value="12,500 kWh" />
+        <Card title="Today’s Output" value="420 kWh" />
+        <Card title="Active Installations" value="128" />
+        <Card title="Open Maintenance Tasks" value="6" />
+      </div>
+
+      {/* Two Charts Side by Side */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        <div className="bg-[#111827] p-4 rounded-lg">
+          <h2 className="text-lg font-semibold mb-4">🔋 Production Trends</h2>
+          <Line data={productionData} options={chartOptions} />
         </div>
-
-        {/* Card 2 - New Clients */}
-        <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center">
-          <h3 className="text-xl font-semibold text-gray-700">New Clients</h3>
-          <p className="text-2xl font-bold text-blue-500 mt-2">50</p>
-          <p className="text-sm text-gray-500 mt-1">+15% from last month</p>
-        </div>
-
-        {/* Card 3 - Jobs Completed */}
-        <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center">
-          <h3 className="text-xl font-semibold text-gray-700">Jobs Completed</h3>
-          <p className="text-2xl font-bold text-yellow-500 mt-2">200</p>
-          <p className="text-sm text-gray-500 mt-1">+5% from last month</p>
+        <div className="bg-[#111827] p-4 rounded-lg">
+          <h2 className="text-lg font-semibold mb-4">💰 Savings Over Time</h2>
+          <Line data={savingsData} options={chartOptions} />
         </div>
       </div>
 
-      {/* Revenue and Jobs Completed Chart */}
-      <div className="bg-white p-6 rounded-lg shadow-md mt-8">
-        <ApexCharts
-          options={chartData.options}
-          series={chartData.series}
-          type="line"
-          height={350}
-        />
+      {/* Maintenance Summary */}
+      <div className="bg-[#111827] p-6 rounded-lg mb-8">
+        <h2 className="text-lg font-semibold mb-4">🛠️ Recent Maintenance</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-300">
+          <div className="p-4 bg-[#1f2937] rounded shadow">
+            <p><span className="text-yellow-400 font-semibold">MNT-032</span> - Site C</p>
+            <p>Status: <span className="text-yellow-400">In Progress</span></p>
+          </div>
+          <div className="p-4 bg-[#1f2937] rounded shadow">
+            <p><span className="text-green-400 font-semibold">MNT-031</span> - Site A</p>
+            <p>Status: <span className="text-green-400">Completed</span></p>
+          </div>
+          <div className="p-4 bg-[#1f2937] rounded shadow">
+            <p><span className="text-red-400 font-semibold">MNT-030</span> - Site B</p>
+            <p>Status: <span className="text-red-400">Pending</span></p>
+          </div>
+        </div>
+      </div>
+
+      {/* System Alerts */}
+      <div className="bg-[#111827] p-6 rounded-lg">
+        <h2 className="text-lg font-semibold mb-4">🚨 System Alerts</h2>
+        <ul className="text-sm text-red-400 space-y-2 list-disc pl-6">
+          <li>Inverter offline at Site D</li>
+          <li>Battery below 20% at Site E</li>
+          <li>No data from Site F (12h)</li>
+        </ul>
       </div>
     </div>
   );
-};
+}
 
-export default Analytics;
+function Card({ title, value }) {
+  return (
+    <div className="bg-[#111827] p-4 rounded-lg shadow text-center">
+      <p className="text-sm text-green-400">{title}</p>
+      <p className="text-2xl font-semibold text-green-400">{value}</p>
+    </div>
+  );
+}

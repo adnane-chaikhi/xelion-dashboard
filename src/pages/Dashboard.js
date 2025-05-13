@@ -6,6 +6,8 @@ import Sidebar from '../components/SideBar';
 import Installations from './Installations';
 import Settings from './Settings';
 import Billing  from './Billing';
+import Maintenance from './Maintenance';
+import Analytics from '../components/Analytics';
 const Dashboard = () => {
   const currentUser = { role: 'Admin' }; // Or 'Admin', 'Support', etc.
 
@@ -26,10 +28,11 @@ const Dashboard = () => {
           {/* Main content area */}
           <div className="flex-grow">
             <Routes>
+              <Route path="/" element={<Analytics />} />
               <Route path="/users" element={<Users />} />
               <Route path="/installations" element={<Installations />} />
               {canAccess('billing') && <Route path="/billing" element={<Billing />} />}
-
+              <Route path="/maintenance" element={<Maintenance/>} />
               <Route path="/settings" element={<Settings/>} />
             </Routes>
           </div>
