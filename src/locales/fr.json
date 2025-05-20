@@ -37,12 +37,15 @@
     "overdue": "En retard",
   
     "installation_dashboard": "Tableau d'installation",
+    "add_installation": "Ajouter une installation",
     "hide_form": "Masquer le formulaire",
     "installation_form": "Formulaire d'installation",
     "client": "Client",
     "installer": "Installateur",
     "panel": "Panneau",
     "installed_at": "Installé le",
+    "select_client": "Sélectionner un client",
+    "select_panel": "Sélectionner un panneau",
     "create_installation": "Créer une installation",
     "existing_installations": "Installations existantes",
     "edit": "Modifier",
@@ -91,6 +94,13 @@
     "email": "Email",
     "role": "Rôle",
     "location": "Emplacement",
-    "actions": "Actions"
+    "actions": "Actions" , 
+
+    "energy_production": "Production d'énergie",
+    "total_energy": "Énergie totale produite",
+    "today_output": "Production d'aujourd'hui",
+    "co2_savings": "Économie de CO₂",
+    "production_trends": "Tendances de production",
+    "weekly_output": "Production hebdomadaire (kWh)"
   }
   

@@ -38,6 +38,8 @@
   
     "installation_dashboard": "Installation Dashboard",
     "hide_form": "Hide Form",
+    "add_installation": "Add Installation",
+
     "installation_form": "Installation Form",
     "client": "Client",
     "installer": "Installer",
@@ -47,6 +49,7 @@
     "existing_installations": "Existing Installations",
     "edit": "Edit",
     "delete": "Delete",
+    
   
     "maintenance_tasks": "Maintenance Tasks",
     "equipment": "Equipment",
@@ -91,7 +94,16 @@
     "email": "Email",
     "role": "Role",
     "location": "Location",
-    "actions": "Actions"
+    "actions": "Actions",
+    
+      "energy_production": "Energy Production",
+      "total_energy": "Total Energy Produced",
+      "today_output": "Today’s Output",
+      "co2_savings": "CO₂ Savings",
+      "production_trends": "Production Trends",
+      "weekly_output": "Weekly Output (kWh)"
+  
+    
 
   }
   

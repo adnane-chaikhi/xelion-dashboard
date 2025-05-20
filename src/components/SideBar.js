@@ -35,7 +35,7 @@ const Sidebar = () => {
         <ul className="space-y-4">
           <SidebarItem icon={<Home />} text={t('dashboard')} to="/" isOpen={isOpen} />
           <SidebarItem icon={<Users />} text={t('users')} to="/users" isOpen={isOpen} />
-          <SidebarItem icon={<BarChart />} text={t('energy')} to="/energy" isOpen={isOpen} />
+          <SidebarItem icon={<BarChart />} text={t('energy')} to="/energy_production" isOpen={isOpen} />
           <SidebarItem icon={<CreditCard />} text={t('billing')} to="/billing" isOpen={isOpen} />
           <SidebarItem icon={<PanelTop />} text={t('installations')} to="/installations" isOpen={isOpen} />
           <SidebarItem icon={<Wrench />} text={t('maintenance')} to="/maintenance" isOpen={isOpen} />

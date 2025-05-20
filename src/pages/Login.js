@@ -35,15 +35,15 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-[#111827] flex items-center justify-center px-4 relative overflow-hidden">
-      
+      <div className="flex justify-center mb-6 top-[10%] left-1/2 transform -translate-x-1/2 absolute">
+          <img src={logo} alt="Xelion" className="w-[220px] h-30"/>
+        </div>
       {/* 🌞 Solar Background Animation */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <div className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] rounded-full bg-yellow-400 opacity-30 animate-ping" />
         <div className="absolute bottom-[20%] right-[10%] w-[120px] h-[120px] border-2 border-yellow-500 rounded-full animate-spin-slow opacity-40" />
       </div>
-      <div className="flex justify-center mb-6 top-[20%] left-1/2 transform -translate-x-1/2">
-          <img src={logo} alt="Xelion" className="w-16 h-16" />
-        </div>
+      
       {/* 💬 Login Form */}
       <div
         className={`relative z-10 w-full max-w-md bg-[#1f2937] text-white rounded-2xl shadow-xl p-8 transition-transform ${
