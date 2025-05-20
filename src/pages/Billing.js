@@ -1,38 +1,22 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const initialData = [
-  {
-    id: 'CL-1001',
-    name: 'Fatima Zahra',
-    type: 'Residential',
-    date: '2025-05-01',
-    amount: 420.75,
-    status: 'Paid',
-  },
-  {
-    id: 'CL-1002',
-    name: 'Youssef Karim',
-    type: 'Commercial',
-    date: '2025-04-20',
-    amount: -150.0,
-    status: 'Unpaid',
-  },
-  {
-    id: 'CL-1003',
-    name: 'Imane El Arabi',
-    type: 'Industrial',
-    date: '2025-03-12',
-    amount: 560.0,
-    status: 'Overdue',
-  },
+  { id: 'CL-1001', name: 'Fatima Zahra', type: 'Residential', date: '2025-05-01', amount: 420.75, status: 'Paid' },
+  { id: 'CL-1002', name: 'Youssef Karim', type: 'Commercial', date: '2025-04-20', amount: -150.0, status: 'Unpaid' },
+  { id: 'CL-1003', name: 'Imane El Arabi', type: 'Industrial', date: '2025-03-12', amount: 560.0, status: 'Overdue' },
 ];
 
 export default function Billing() {
+  const { t } = useTranslation();
+
   const [data, setData] = useState(initialData);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
+  const [formType, setFormType] = useState('');
   const [showForm, setShowForm] = useState(false);
-  const [formType, setFormType] = useState('Bill');
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
   const [newEntry, setNewEntry] = useState({
     id: '',
     name: '',
@@ -41,6 +25,14 @@ export default function Billing() {
     amount: '',
     status: 'Unpaid',
   });
+
+  const handleAddEntry = (e) => {
+    e.preventDefault();
+    if (!newEntry.name || !newEntry.amount || !newEntry.date) return;
+    setData([{ ...newEntry, amount: parseFloat(newEntry.amount) }, ...data]);
+    setShowForm(false);
+    setNewEntry({ id: '', name: '', type: '', date: '', amount: '', status: 'Unpaid' });
+  };
 
   const handleStatusChange = (index, newStatus) => {
     const updated = [...data];
@@ -58,66 +50,61 @@ export default function Billing() {
     return matchesSearch && matchesStatus;
   });
 
-  const totalRevenue = data
-    .filter((item) => item.amount > 0 && item.status === 'Paid')
-    .reduce((sum, item) => sum + item.amount, 0);
+  const totalRevenue = data.filter(d => d.status === 'Paid').reduce((acc, d) => acc + d.amount, 0);
+  const totalUnpaid = data.filter(d => d.status === 'Unpaid').reduce((acc, d) => acc + d.amount, 0);
+  const totalOverdue = data.filter(d => d.status === 'Overdue').reduce((acc, d) => acc + d.amount, 0);
 
-  const totalUnpaid = data
-    .filter((item) => item.status === 'Unpaid')
-    .reduce((sum, item) => sum + item.amount, 0);
-
-  const totalOverdue = data
-    .filter((item) => item.status === 'Overdue')
-    .reduce((sum, item) => sum + item.amount, 0);
-
-  const handleAddEntry = (e) => {
-    e.preventDefault();
-    if (!newEntry.name || !newEntry.amount || !newEntry.date) return;
-    setData([{ ...newEntry, amount: parseFloat(newEntry.amount) }, ...data]);
-    setShowForm(false);
-    setNewEntry({ id: '', name: '', type: '', date: '', amount: '', status: 'Unpaid' });
+  const openForm = (type) => {
+    setFormType(type);
+    setShowForm(true);
+    setDropdownOpen(false);
   };
 
   return (
     <div className="p-6 bg-[#172137] min-h-screen text-gray-100">
-      <h1 className="text-2xl font-bold mb-6">Billing Overview</h1>
+      <h1 className="text-2xl font-bold mb-6">{t('billing_overview')}</h1>
 
       {/* Analytics */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <div className="bg-[#1f2937] p-4 rounded-lg shadow">
-          <p className="text-sm text-gray-400">Total Revenue (Paid)</p>
+          <p className="text-sm text-gray-400">{t('total_revenue')}</p>
           <p className="text-xl font-bold text-green-400">${totalRevenue.toFixed(2)}</p>
         </div>
         <div className="bg-[#1f2937] p-4 rounded-lg shadow">
-          <p className="text-sm text-gray-400">Total Unpaid</p>
+          <p className="text-sm text-gray-400">{t('total_unpaid')}</p>
           <p className="text-xl font-bold text-yellow-400">${Math.abs(totalUnpaid).toFixed(2)}</p>
         </div>
         <div className="bg-[#1f2937] p-4 rounded-lg shadow">
-          <p className="text-sm text-gray-400">Overdue Amount</p>
+          <p className="text-sm text-gray-400">{t('overdue_amount')}</p>
           <p className="text-xl font-bold text-red-400">${Math.abs(totalOverdue).toFixed(2)}</p>
         </div>
       </div>
 
-      {/* Action dropdown */}
-      <div className="mb-6 flex items-center gap-4">
-        <select
-          onChange={(e) => setFormType(e.target.value)}
-          className="bg-[#1f2937] border border-gray-600 text-white px-4 py-2 rounded"
-        >
-          <option value="Bill">Add Bill</option>
-          <option value="Quote">Add Quote</option>
-        </select>
+      {/* Create Button Dropdown */}
+      <div className="relative mb-6">
         <button
-          onClick={() => setShowForm(!showForm)}
-          className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-4 py-2 rounded"
+          onClick={() => setDropdownOpen(!dropdownOpen)}
+          className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-4 py-2 rounded inline-flex items-center"
         >
-          {showForm ? 'Cancel' : `Create ${formType}`}
+          {t('create')} ▼
         </button>
+
+        {dropdownOpen && (
+          <div className="absolute mt-2 bg-[#1f2937] border border-gray-700 rounded shadow-lg z-10 w-44">
+            <button onClick={() => openForm('Bill')} className="w-full text-left px-4 py-2 hover:bg-yellow-600 text-white">
+              + {t('add_bill')}
+            </button>
+            <button onClick={() => openForm('Quote')} className="w-full text-left px-4 py-2 hover:bg-yellow-600 text-white">
+              + {t('add_quote')}
+            </button>
+          </div>
+        )}
       </div>
 
-      {/* Add Entry Form */}
+      {/* Billing Form */}
       {showForm && (
         <form onSubmit={handleAddEntry} className="bg-[#1f2937] p-6 rounded-lg mb-8 space-y-4">
+          <h2 className="text-xl font-semibold mb-4">Create {formType}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input type="text" placeholder="Client ID" className="px-4 py-2 bg-[#111827] border border-gray-700 rounded" value={newEntry.id} onChange={(e) => setNewEntry({ ...newEntry, id: e.target.value })} />
             <input type="text" placeholder="Full Name" className="px-4 py-2 bg-[#111827] border border-gray-700 rounded" value={newEntry.name} onChange={(e) => setNewEntry({ ...newEntry, name: e.target.value })} />
@@ -136,7 +123,7 @@ export default function Billing() {
         </form>
       )}
 
-      {/* Search + Status Filters */}
+      {/* Filters */}
       <div className="flex flex-col md:flex-row gap-4 mb-6">
         <input
           type="text"
@@ -148,7 +135,7 @@ export default function Billing() {
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="px-4 py-2 bg-[#1f2937] text-white border border-gray-700 rounded focus:outline-none"
+          className="px-4 py-2 bg-[#1f2937] text-white border border-gray-700 rounded"
         >
           <option value="All">All</option>
           <option value="Paid">Paid</option>
@@ -157,26 +144,24 @@ export default function Billing() {
         </select>
       </div>
 
-      {/* Billing Table */}
+      {/* Table */}
       <div className="overflow-x-auto bg-[#1f2937] shadow rounded-lg">
         <table className="min-w-full text-sm text-left text-gray-300">
           <thead className="bg-[#111827] text-gray-400 border-b border-gray-700">
             <tr>
-              <th className="p-4">Client ID</th>
-              <th className="p-4">Full Name</th>
-              <th className="p-4">Installation Type</th>
-              <th className="p-4">Date</th>
-              <th className="p-4">Amount</th>
-              <th className="p-4">Status</th>
-              <th className="p-4 text-right">Action</th>
+              <th className="p-4">{t('client_id')}</th>
+              <th className="p-4">{t('full_name')}</th>
+              <th className="p-4">{t('installation_type')}</th>
+              <th className="p-4">{t('date')}</th>
+              <th className="p-4">{t('amount')}</th>
+              <th className="p-4">{t('status')}</th>
+              <th className="p-4 text-right">{t('actions')}</th>
             </tr>
           </thead>
           <tbody>
             {filteredData.length === 0 ? (
               <tr>
-                <td colSpan="7" className="p-6 text-center text-gray-500">
-                  No matching results.
-                </td>
+                <td colSpan="7" className="p-6 text-center text-gray-500">No matching results.</td>
               </tr>
             ) : (
               filteredData.map((client, index) => (

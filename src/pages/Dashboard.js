@@ -8,6 +8,7 @@ import Settings from './Settings';
 import Billing  from './Billing';
 import Maintenance from './Maintenance';
 import Analytics from '../components/Analytics';
+import Alerts from './Alerts';
 const Dashboard = () => {
   const currentUser = { role: 'Admin' }; // Or 'Admin', 'Support', etc.
 
@@ -33,6 +34,7 @@ const Dashboard = () => {
               <Route path="/installations" element={<Installations />} />
               {canAccess('billing') && <Route path="/billing" element={<Billing />} />}
               <Route path="/maintenance" element={<Maintenance/>} />
+              <Route path="/alerts" element={<Alerts/>} />
               <Route path="/settings" element={<Settings/>} />
             </Routes>
           </div>
